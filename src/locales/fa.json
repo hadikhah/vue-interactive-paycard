@@ -1,0 +1,20 @@
+{
+    "message": "سلام جیگر !!",
+    "card": {
+        "cardHolder": "نام و نام خانوادگی",
+        "fullName": "    ",
+        "expires": "انقضا",
+        "MM": "",
+        "YY": ""
+    },
+    "cardForm": {
+        "cardNumber": "شماره کارت",
+        "cardName": "نام دارنده حساب",
+        "expirationDate": "تاریخ انقضا",
+        "month": "ماه",
+        "year": "سال",
+        "CVV": "CCV2",
+        "submit": "ثبت",
+        "invalidCardNumber": "شماره کارت نامعتبر"
+    }
+}

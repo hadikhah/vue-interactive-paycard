@@ -24,18 +24,19 @@
           data-card-field
           autocomplete="off"
         />
-        <button
+        <!-- <button
           class="card-input__eye"
           :class="{ '-active' : !isCardNumberMasked }"
           title="Show/Hide card number"
           tabindex="-1"
           :disabled="formData.cardNumber === ''"
           @click="toggleMask"
-        ></button>
+        ></button> -->
       </div>
       <div class="card-input">
-        <label for="cardName" class="card-input__label">{{ $t('cardForm.cardName') }}</label>
+        <label for="cardName"  class="card-input__label">{{ $t('cardForm.cardName') }}</label>
         <input
+        style="direction:rtl"
           type="text"
           :id="fields.cardName"
           v-letter-only
@@ -48,8 +49,8 @@
       </div>
       <div class="card-form__row">
         <div class="card-form__col">
-          <div class="card-form__group">
             <label for="cardMonth" class="card-input__label">{{ $t('cardForm.expirationDate') }}</label>
+          <div class="card-form__group" style="direction:rtl" >
             <select
               class="card-input__input -select"
               :id="fields.cardMonth"
@@ -165,7 +166,7 @@ export default {
         cardYear: 'v-card-year',
         cardCvv: 'v-card-cvv'
       },
-      minCardYear: new Date().getFullYear(),
+      minCardYear: 1400,
       isCardNumberMasked: true,
       mainCardNumber: this.cardNumber,
       cardNumberMaxLength: 19
@@ -202,6 +203,9 @@ export default {
       if ((/^3[47]\d{0,13}$/).test(value)) {
         this.formData.cardNumber = value.replace(/(\d{4})/, '$1 ').replace(/(\d{4}) (\d{6})/, '$1 $2 ')
         this.cardNumberMaxLength = 17
+      } else if ((/^3[603]\d{0,14}$/).test(value)) {
+        this.formData.cardNumber = value.replace(/(\d{4})/, '$1 ').replace(/(\d{4}) (\d{6})/, '$1 $2 ')
+        this.cardNumberMaxLength = 16
       } else if ((/^3(?:0[0-5]|[68]\d)\d{0,11}$/).test(value)) { // diner's club, 14 digits
         this.formData.cardNumber = value.replace(/(\d{4})/, '$1 ').replace(/(\d{4}) (\d{6})/, '$1 $2 ')
         this.cardNumberMaxLength = 16

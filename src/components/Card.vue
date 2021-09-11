@@ -21,15 +21,15 @@
             class="card-item__chip"
           />
           <div class="card-item__type">
-            <transition name="slide-fade-up">
+            <!-- <transition name="slide-fade-up">
               <img
-                :src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + cardType + '.png'"
+                :src="'/images/' + cardType + '.png'"
                 v-if="cardType"
                 :key="cardType"
                 alt
                 class="card-item__typeImg"
               />
-            </transition>
+            </transition> -->
           </div>
         </div>
         <label :for="fields.cardNumber" class="card-item__number" :ref="fields.cardNumber">
@@ -53,38 +53,46 @@
             </span>
           </template>
         </label>
-        <div class="card-item__content">
-          <label :for="fields.cardName" class="card-item__info" :ref="fields.cardName">
+        <div class="card-item__content" >
+
+          <div class="card-item__date"  ref="cardDate">
+            <label style="direction:rtl" :for="fields.cardMonth" class="card-item__dateTitle">{{ $t('card.expires') }}</label>
+            <label for="cardYear" class="card-item__dateItem">
+              <transition name="slide-fade-up">
+                <span v-if="labels.cardYear" :key="labels.cardYear">{{String(labels.cardYear).slice(2,4)}}</span>
+                <span v-else key="2"> {{ $t('card.YY') }} </span>
+              </transition>
+            </label>
+            /
+            <label :for="fields.cardMonth" class="card-item__dateItem">
+              <transition name="slide-fade-up">
+                <span v-if="labels.cardMonth" :key="labels.cardMonth">{{labels.cardMonth}}</span>
+                <span v-else key="2"> {{ $t('card.MM') }} </span>
+              </transition>
+            </label>
+          </div>
+          <label style="direction:rtl" :for="fields.cardName" class="card-item__info" :ref="fields.cardName">
             <div class="card-item__holder">{{ $t('card.cardHolder') }}</div>
             <transition name="slide-fade-up">
               <div class="card-item__name" v-if="labels.cardName.length" key="1">
-                <transition-group name="slide-fade-right">
+                <!-- <transition-group name="slide-fade-right">
                   <span
                     class="card-item__nameItem"
                     v-for="(n, $index) in labels.cardName.replace(/\s\s+/g, ' ')"
                     :key="$index + 1"
                   >{{n}}</span>
-                </transition-group>
+
+                </transition-group> -->
+                <transition>
+                  <span class="card-item__nameItem">
+                   {{labels.cardName}}
+                  </span>
+                </transition>
+
               </div>
               <div class="card-item__name" v-else key="2">{{ $t('card.fullName') }}</div>
             </transition>
           </label>
-          <div class="card-item__date" ref="cardDate">
-            <label :for="fields.cardMonth" class="card-item__dateTitle">{{ $t('card.expires') }}</label>
-            <label :for="fields.cardMonth" class="card-item__dateItem">
-              <transition name="slide-fade-up">
-                <span v-if="labels.cardMonth" :key="labels.cardMonth">{{labels.cardMonth}}</span>
-                <span v-else key="2">{{ $t('card.MM') }}</span>
-              </transition>
-            </label>
-            /
-            <label for="cardYear" class="card-item__dateItem">
-              <transition name="slide-fade-up">
-                <span v-if="labels.cardYear" :key="labels.cardYear">{{String(labels.cardYear).slice(2,4)}}</span>
-                <span v-else key="2">{{ $t('card.YY') }}</span>
-              </transition>
-            </label>
-          </div>
         </div>
       </div>
     </div>
@@ -102,13 +110,13 @@
         <div class="card-item__cvvBand">
           <span v-for="(n, $index) in labels.cardCvv" :key="$index">*</span>
         </div>
-        <div class="card-item__type">
+        <!-- <div class="card-item__type">
           <img
-            :src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + cardType + '.png'"
+            :src="'/images/' + cardType + '.png'"
             v-if="cardType"
             class="card-item__typeImg"
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -152,6 +160,7 @@ export default {
     }
   },
   mounted () {
+    // console.log(this.$t('card.fa.YY'))
     this.changePlaceholder()
 
     let self = this
@@ -192,6 +201,9 @@ export default {
       re = new RegExp('^6011')
       if (number.match(re) != null) return 'discover'
 
+      re = new RegExp('^6037')
+      if (number.match(re) != null) return 'bank_melli'
+
       re = new RegExp('^62')
       if (number.match(re) != null) return 'unionpay'
 
@@ -207,6 +219,12 @@ export default {
       return '' // default type
     },
     currentCardBackground () {
+      if (this.cardType) {
+        return `/images/${this.cardType}_card.png`
+      }
+      return this.cardBankground
+    },
+    cardBankground () {
       if (this.randomBackgrounds && !this.backgroundImage) { // TODO will be optimized
         let random = Math.floor(Math.random() * 25 + 1)
         return `https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/${random}.jpeg`

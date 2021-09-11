@@ -10,6 +10,10 @@ export const CARD_TYPES = {
     name: 'Visa',
     color: 'lime'
   },
+  bank_melli: {
+    name: 'بانک ملی',
+    color: 'blue'
+  },
   diners: {
     name: 'Diners',
     color: 'orange'
